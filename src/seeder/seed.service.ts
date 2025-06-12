@@ -10,32 +10,27 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class SeedService {
   private readonly logger = new Logger('SeederService');
-  private readonly configService: ConfigService
+  private readonly configService: ConfigService;
 
+  // Asegúrate de inyectar ConfigService en el constructor
   constructor(
     private readonly userService: UserService,
-  ) { }
+    configService: ConfigService,  // Inyección de ConfigService
+  ) {
+    this.configService = configService; // Inicialización de la propiedad
+  }
 
   public async runSeeders() {
+    // Ahora puedes usar this.configService sin problemas
     if (this.configService.get('APP_PROD') === true)
       return { message: 'No se puede ejecutar seeders en producción' };
-    try {
-      const user: CreateUserDto = {
-        nombre: 'luis',
-        apellido: 'janco',
-        email: 'luis@gmail.com',
-        password: '123456789',
-        role: ROLES.ADMIN,
-        genero: GENDERS.MASCULINO,
-      };
-      await this.userService.createUser(user);
 
+    try {
       const user2: CreateUserDto = {
-        nombre: 'Maria',
-        apellido: 'Romero',
+        name: 'Maria',
+        last_name: 'Romero',
         email: 'maria@gmail.com',
         password: '123456789',
-        role: ROLES.BASIC,
         genero: GENDERS.FEMENINO,
       };
       await this.userService.createUser(user2);

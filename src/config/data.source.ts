@@ -15,10 +15,11 @@ export const DataSourceConfig: DataSourceOptions = {
   entities: [__dirname + '/../**/**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   synchronize: true,
+  // dropSchema: true,
   namingStrategy: new SnakeNamingStrategy(),
   logging: false,
   extra: {
-    ssl: configService.get('APP_PROD') === 'true' ? { rejectUnauthorized: false } : null
+    ssl: configService.get('APP_PROD') === 'true' ? { rejectUnauthorized: false } : { rejectUnauthorized: false }
   }
 };
 

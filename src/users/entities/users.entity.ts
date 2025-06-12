@@ -1,19 +1,20 @@
-import { Entity } from 'typeorm';
+import { Entity, OneToMany } from 'typeorm';
 import { Column } from 'typeorm/decorator/columns/Column';
 import { Exclude } from 'class-transformer';
 
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { ROLES } from 'src/common/constants';
 import { IUser } from '../interfaces/user.interface';
 import { GENDERS } from 'src/common/constants/configuracion';
+import { MemberProjectEntity } from 'src/projects/entities/member-project.entity';
+import { ProjectEntity } from 'src/projects/entities/project.entity';
 
 @Entity({ name: 'user' })
 export class UsersEntity extends BaseEntity implements IUser {
   @Column({ type: 'varchar', length: 50, nullable: false })
-  nombre: string;
+  name: string;
 
   @Column({ type: 'varchar', length: 50, nullable: false })
-  apellido: string;
+  last_name: string;
 
   @Column({ type: 'varchar', length: 100, unique: true })
   email: string;
@@ -22,14 +23,15 @@ export class UsersEntity extends BaseEntity implements IUser {
   @Column()
   password: string;
 
-  @Column({ type: 'enum', enum: ROLES, nullable: false })
-  role: ROLES;
-
   @Column({ type: 'enum', enum: GENDERS, nullable: true })
   gender: GENDERS;
 
   @Column({ type: 'bool', default: false })
   isSuspended: boolean;
 
-  // relations
+  @OneToMany(() => MemberProjectEntity, (memberProject) => memberProject.user)
+  projects: MemberProjectEntity[];
+
+  @OneToMany(() => ProjectEntity, (project) => project.user)
+  projectsCreated: ProjectEntity[];
 }

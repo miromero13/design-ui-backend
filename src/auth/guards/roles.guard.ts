@@ -19,14 +19,16 @@ export class RolesGuard implements CanActivate {
       if (roles === undefined) {
         if (!admin) return true;
         if (admin && roleUser === ROLES.ADMIN) return true;
-        throw new UnauthorizedException('No tienes permisos para acceder a esta ruta.');
+        throw new UnauthorizedException('No tienes permisos parda acceder a esta ruta.');
       }
 
       if (roleUser === ROLES.ADMIN) return true;
 
+      if(roleUser === ROLES.BASIC) return true;
+
       const isAuthorized = roles.some((role) => roleUser === role);
       if (!isAuthorized)
-        throw new UnauthorizedException('No tienes permisos para acceder a esta ruta.');
+        throw new UnauthorizedException('No tienes permisos parca acceder a esta ruta.');
       return true;
     } catch (error) {
       throw new InternalServerErrorException('Error al validar los permisos');

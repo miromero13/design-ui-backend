@@ -64,12 +64,13 @@ export class AuthService {
   }
 
   public signJWT({ payload, secret, expiresIn }: IJwtPayload) {
-    return jwt.sign(payload, secret, { expiresIn });
+    const options: jwt.SignOptions = { expiresIn: expiresIn as any }; 
+    return jwt.sign(payload, secret, options);
   }
 
   public async generateJWT(user: UsersEntity): Promise<any> {
     const getUser: UsersEntity = await this.userService.findOne(user.id);
-    const payload: IPayload = { sub: getUser.id, role: getUser.role };
+    const payload: IPayload = { sub: getUser.id };
     const accessToken = this.signJWT({
       payload, secret: this.configService.get('JWT_AUTH'), expiresIn: '1d'
     });
@@ -78,7 +79,7 @@ export class AuthService {
 
   public async recoverPassword(email: string): Promise<any> {
     const user = await this.userService.findOneBy({ key: 'email', value: email });
-    const payload: IPayload = { sub: user.id, role: user.role };
+    const payload: IPayload = { sub: user.id };
 
     const accessToken = this.signJWT({
       payload,
@@ -190,11 +191,10 @@ export class AuthService {
       } catch (error) {
         if (error instanceof NotFoundException) {
           const createUserDto: CreateUserDto = {
-            nombre: googleUserData.given_name,
-            apellido: googleUserData.family_name,
+            name: googleUserData.given_name,
+            last_name: googleUserData.family_name,
             email: googleUserData.email,
             password: '',
-            role: ROLES.BASIC,
             genero: null,
           };
           user = await this.userService.createUser(createUserDto);

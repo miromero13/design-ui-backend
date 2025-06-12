@@ -1,17 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsArray,
   IsEmail,
   IsEnum,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   MinLength,
 } from 'class-validator';
 
-import { ROLES } from 'src/common/constants';
-import { GENDERS, NOTIFICACTIONS } from 'src/common/constants/configuracion';
+import { GENDERS } from 'src/common/constants/configuracion';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -22,7 +19,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(2)
-  nombre: string;
+  name: string;
 
   @ApiProperty({
     example: 'John Doe',
@@ -32,7 +29,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(2)
-  apellido: string;
+  last_name: string;
 
   @ApiProperty({
     example: 'john@live.com',
@@ -53,16 +50,6 @@ export class CreateUserDto {
   @IsString()
   @MinLength(6)
   password: string;
-
-  @ApiProperty({
-    example: 'basic',
-    enum: ROLES,
-    description: 'Rol del usuario',
-  })
-  @IsNotEmpty()
-  @IsString()
-  @IsEnum(ROLES)
-  role: ROLES;
 
   @ApiProperty({
     example: 'masculino',

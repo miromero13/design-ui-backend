@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Post, Delete, Param, UseGuards, ParseUUIDPipe, Query, Patch, } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags, } from '@nestjs/swagger';
 
-import { RolesAccess } from 'src/auth/decorators/roles.decorator';
+// import { RolesAccess } from 'src/auth/decorators/roles.decorator';
 import { AdminAccess } from 'src/auth/decorators';
-import { AuthGuard, RolesGuard } from 'src/auth/guards';
+import { AuthGuard } from 'src/auth/guards';
 import { CreateUserDto, UpdateUserDto } from '../dto';
 import { QueryDto } from 'src/common/dto/query.dto';
 import { ResponseMessage } from 'src/common/interfaces/responseMessage.interface';
@@ -12,7 +12,7 @@ import { UsersEntity } from '../entities/users.entity';
 
 @ApiTags('Users')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, RolesGuard)
+@UseGuards(AuthGuard)
 @Controller('user')
 export class UsersController {
 
@@ -23,7 +23,7 @@ export class UsersController {
     return await this.userService.createUser(body);
   }
 
-  @RolesAccess('ADMIN')
+  // @RolesAccess('BASIC')
   @ApiBearerAuth()
   @ApiQuery({ name: 'limit', type: 'number', required: false })
   @ApiQuery({ name: 'offset', type: 'number', required: false })
